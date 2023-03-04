@@ -35,7 +35,8 @@ class NN(tf.keras.Model):
         # _inputs = tf.math.exp(inputs)
         # output = self.c0 * tf.math.exp(inputs * self.nn.call(inputs))
         # output = tf.math.exp(self.nn.call(inputs))
-        output = self.c0 + inputs * self.nn.call(inputs)
+        # output = self.c0 + inputs * self.nn.call(inputs)
+        output = self.nn.call(inputs)
         return output
 
     def train_op(self, inputs, targets):
@@ -105,7 +106,8 @@ class PINN(tf.keras.Model):
         self._name = name
     
     def call(self, inputs):
-        output = self.c0 + inputs * self.nn.call(inputs)
+        # output = self.c0 + inputs * self.nn.call(inputs)
+        output = self.nn.call(inputs)
         return output
     
     @tf.function
@@ -138,8 +140,8 @@ class PINN(tf.keras.Model):
         k_apc = 0.0014
         # k_apc = tf.math.exp(self.log_k_apc)
         h_apc = 0.1
-        k1 = 2.82
-        # k1 = tf.math.exp(self.log_k1)
+        # k1 = 2.82
+        k1 = tf.math.exp(self.log_k1)
         h11 = 0.2
         k5_10 = 100
         k8_9 = 100
@@ -166,7 +168,7 @@ class PINN(tf.keras.Model):
             eq1, eq2, eq3, eq4, eq5, eq6, eq7, eq8 = tf.split(ODE, 8, axis=-1)
             loss_ode = 0 * tf.reduce_mean(eq5 ** 2) + \
                         0 * tf.reduce_mean(eq7 ** 2) + \
-                        0 * tf.reduce_mean(eq8 ** 2)
+                        1 * tf.reduce_mean(eq8 ** 2)
             loss_u = tf.reduce_mean((self.call(t_u) - u) ** 2)
             total_loss = self.eps * loss_ode + loss_u
         grads = tape.gradient(total_loss, self.trainable_variables)

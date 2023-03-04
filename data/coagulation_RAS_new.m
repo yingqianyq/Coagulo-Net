@@ -22,7 +22,7 @@ options = odeset('NonNegative',1:8);
 %     'NonNegative', 1:8, ...
 %     'RelTol', 1e-7,'AbsTol', 1e-7 ...
 % );
-tspan = linspace(0, 100, 4000); % 0 to 100 mins - time scale
+tspan = linspace(0, 100, 2000); % 0 to 100 mins - time scale
 [t, y] = ode45(@ODEsystem,tspan,IC,options);
 IXa = y(:,1);
 Xa = y(:,2);
@@ -33,7 +33,7 @@ Va = y(:,6);
 APC = y(:,7);
 Ia = y(:,8);
 
-% save data_4k_points t y IC
+% save data_2k_points t y IC
 
 figure
 % hold on

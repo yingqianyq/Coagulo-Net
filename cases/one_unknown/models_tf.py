@@ -97,15 +97,10 @@ class PINN(tf.keras.Model):
         self.activation = activation
         self.eps = tf.constant(eps, tf.float32)
         self.nn.build(input_shape=[None, 1])
-
-        print("eps: ", self.eps)
         
         self.log_k1 = tf.Variable(0.0, dtype=tf.float32, name="log_k1")
         self.log_k_apc = tf.Variable(0.0, dtype=tf.float32, name="log_k_apc")
         self.log_k8 = tf.Variable(0.0, dtype=tf.float32, name="log_k8")
-        self.log_ka = tf.Variable(0.0, dtype=tf.float32, name="log_ka")
-        self.log_k5 = tf.Variable(0.0, dtype=tf.float32, name="log_k5")
-        self.log_h5 = tf.Variable(0.0, dtype=tf.float32, name="log_h5")
         self.opt = tf.keras.optimizers.Adam()
 
         self._name = name
@@ -139,12 +134,9 @@ class PINN(tf.keras.Model):
         # k8 = 0.00001
         k8 = tf.math.exp(self.log_k8)
         h8 = 0.31
-        # ka = 1.2
-        ka = tf.math.exp(self.log_ka)
-        # k5 = 0.17
-        k5 = tf.math.exp(self.log_k5)
-        # h5 = 0.31
-        h5 = tf.math.exp(self.log_h5)
+        ka = 1.2
+        k5 = 0.17
+        h5 = 0.31
         k_apc = 0.0014
         # k_apc = tf.math.exp(self.log_k_apc)
         h_apc = 0.1
@@ -174,17 +166,14 @@ class PINN(tf.keras.Model):
             ODE = self.ODE(t_ode)
             # loss_ode = tf.reduce_mean(ODE ** 2)
             eq1, eq2, eq3, eq4, eq5, eq6, eq7, eq8 = tf.split(ODE, 8, axis=-1)
-            # 0.00001, 10, eps = 1e-4
-            loss_ode = 0.00001 * tf.reduce_mean(eq5 ** 2) + \
-                        10 * tf.reduce_mean(eq6 ** 2)
+            loss_ode = 1 * tf.reduce_mean(eq5 ** 2) + \
+                        0 * tf.reduce_mean(eq7 ** 2) + \
+                        0 * tf.reduce_mean(eq8 ** 2)
             loss_u = tf.reduce_mean((self.call(t_u) - u) ** 2)
             total_loss = self.eps * loss_ode + loss_u
-            eq5_loss = tf.reduce_mean(eq5 ** 2)
-            eq6_loss = tf.reduce_mean(eq6 ** 2)
         grads = tape.gradient(total_loss, self.trainable_variables)
         self.opt.apply_gradients(zip(grads, self.trainable_variables))
-        return total_loss, loss_ode, loss_u, eq5_loss, eq6_loss
-        # return total_loss, loss_ode, loss_u
+        return total_loss, loss_ode, loss_u
 
     def train(self, t_ode, t_u, u, niter=20000):
         t_ode = tf.constant(t_ode, tf.float32)
@@ -198,14 +187,12 @@ class PINN(tf.keras.Model):
         data_loss = []
         min_loss = 1000
         for i in range(niter):
-            loss_value, ode_loss_value, data_loss_value, eq5_loss, eq6_loss = train_op(t_ode, t_u, u)
-            # loss_value, ode_loss_value, data_loss_value = train_op(t_ode, t_u, u)
+            loss_value, ode_loss_value, data_loss_value = train_op(t_ode, t_u, u)
             loss += [loss_value.numpy()]
             ode_loss += [ode_loss_value.numpy()]
             data_loss += [data_loss_value.numpy()]
             if i % 1000 == 0:
-                print(i, loss[-1], ode_loss[-1], data_loss[-1], eq5_loss.numpy(), eq6_loss.numpy())
-                # print(i, loss[-1], ode_loss[-1], data_loss[-1])
+                print(i, loss[-1], ode_loss[-1], data_loss[-1])
                 if loss[-1] < min_loss:
                     min_loss = loss[-1]
                     self.save_weights(
