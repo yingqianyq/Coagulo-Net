@@ -176,7 +176,7 @@ class PINN(tf.keras.Model):
             eq1, eq2, eq3, eq4, eq5, eq6, eq7, eq8 = tf.split(ODE, 8, axis=-1)
             # 0.00001, 10, eps = 1e-4
             loss_ode = 0.00001 * tf.reduce_mean(eq5 ** 2) + \
-                        10 * tf.reduce_mean(eq6 ** 2)
+                        100 * tf.reduce_mean(eq6 ** 2)
             loss_u = tf.reduce_mean((self.call(t_u) - u) ** 2)
             total_loss = self.eps * loss_ode + loss_u
             eq5_loss = tf.reduce_mean(eq5 ** 2)
@@ -196,6 +196,7 @@ class PINN(tf.keras.Model):
         loss = []
         ode_loss = []
         data_loss = []
+        h5_list = []
         min_loss = 1000
         for i in range(niter):
             loss_value, ode_loss_value, data_loss_value, eq5_loss, eq6_loss = train_op(t_ode, t_u, u)
@@ -203,15 +204,16 @@ class PINN(tf.keras.Model):
             loss += [loss_value.numpy()]
             ode_loss += [ode_loss_value.numpy()]
             data_loss += [data_loss_value.numpy()]
+            h5_list += [tf.math.exp(self.log_h5).numpy()]
             if i % 1000 == 0:
-                print(i, loss[-1], ode_loss[-1], data_loss[-1], eq5_loss.numpy(), eq6_loss.numpy())
+                print(i, loss[-1], ode_loss[-1], data_loss[-1], eq5_loss.numpy(), eq6_loss.numpy(), tf.math.exp(self.log_h5).numpy())
                 # print(i, loss[-1], ode_loss[-1], data_loss[-1])
                 if loss[-1] < min_loss:
                     min_loss = loss[-1]
                     self.save_weights(
                         filepath="./checkpoints/"+self.name, overwrite=True,
                     )
-        return loss, ode_loss, data_loss, min_loss
+        return loss, ode_loss, data_loss, min_loss, h5_list
 
     def restore(self):
         self.load_weights(filepath="./checkpoints/"+self.name)
