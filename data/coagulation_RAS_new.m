@@ -33,7 +33,7 @@ Va = y(:,6);
 APC = y(:,7);
 Ia = y(:,8);
 
-% save data_2k_points t y IC
+% save data_2000_points_noise t y IC
 
 figure
 % hold on
