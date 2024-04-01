@@ -3,14 +3,14 @@ function y = SFinCon2
 % global inpcon;
 
 % k13  = 4.381;%4.7984;            %nM^{-1}s^{-1}   %% binding of Xa with TFPI (modified 6/20/2016)
-k13 = 4.0912995;
+k13 = 4.363765;
 % k14  = 5.293e-08;%7.427e-08;        %s^{-1}          %% dissociation of Xa:TFPI
-k14 = 8.180822e-05;
+k14 = 4.5439238e-06;
 k15  = 0.05;             %nM^{-1}s^{-1}   %% Xa:TFPI inactivation of TF:VIIa
 k16  = 1.83e-04/60.0;    %%(fminc)  %nM^{-1}s^{-1}   %% ATIII inactivation of Xa % (1.83e-04/60.0,Wb,2003); (1.5e-06, HM 2002); AM,2008 0.347/60.0 (Panteleev 2006)
 k17  = 1.34e-05/60.0;    %nM^{-1}s^{-1}   %% ATIII inactivation of IXa % (1.34e-05/60.0,Wb,2003); (4.9e-07, HM 2002); AM,2008 0.0162/60.0 (Panteleev 2006)
 % k18  = 1.79e-04;         %%(fminc)   %nM^{-1}s^{-1}   %% ATIII inactivation of IIa % (2.89e-04/60.0,Wb,2003); (7.1e-06, HM 2002); AM,2008 0.0119 11.56e-03 (Panteleev 2006)(modified 6/20/2016)
-k18 = 0.0001781236;
+k18 = 0.00017884806;
 k19  = 4.5e-07;          %nM^{-1}s^{-1}   %% ATIII inactivation of TF:VIIa (HM 2002 2.3e-07)(Lawson et al.,1993,4.5e-07 no HS, 5.6e-06 with HS)
 k20  = 0.01;             %nM^{-1}s^{-1}   %% binding of IXa^{m} and VIIIa^{m} (modified 6/20/2016)
 k21  = 5.0e-03;          %s^{-1}          %% dissociation of IXa{m}:VIIIa{m} 0.01;%

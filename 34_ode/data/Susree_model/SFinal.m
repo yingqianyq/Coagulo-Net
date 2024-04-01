@@ -73,14 +73,15 @@ spec = Y<0;                                         %to eliminate negative zeroe
 Y(spec)= 0;
 
 % save reference t Y
-save ../tmp3 t Y
+save ../tmp_1 t Y 
+save ../tmp_exp exp_t exp_IIa
 
 %     obj = sum(((Y(:,17)*NDM(17))-exp_IIa).^2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-FIGURES-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 c1 = 'k';c2 = 'b';c3 = 'm';
 
 figure;
-% plot(exp_t,exp_IIa, 'Color',c1,'display','IIa^{m}');hold on;
+plot(exp_t,exp_IIa, 'Color',c1,'display','IIa^{m}');hold on;
 plot(t*TIM,((Y(:,15)*NDM(15))+(Y(:,17)*NDM(17)))*10^(-9),...
     'LineWidth',1.0,'Color',c2, 'display','[TF]=25pM');hold off;
 % plot(t,(Y(:,11)*NDM(11)), 'Color',c1,'display','IIa^{m}');hold off;

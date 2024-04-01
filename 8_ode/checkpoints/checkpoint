@@ -1,2 +1,2 @@
-model_checkpoint_path: "pinn"
-all_model_checkpoint_paths: "pinn"
+model_checkpoint_path: "nn"
+all_model_checkpoint_paths: "nn"
