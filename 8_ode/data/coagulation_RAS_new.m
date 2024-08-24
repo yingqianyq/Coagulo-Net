@@ -33,7 +33,7 @@ Va = y(:,6);
 APC = y(:,7);
 Ia = y(:,8);
 
-% save data_2000_points_noise t y IC
+save data_h5_80 t y IC
 
 figure
 % hold on
@@ -77,7 +77,7 @@ h8 = 0.31; % min.^-1
 ka = 1.2; % nM.^-1 min.^-1
 
 k5 = 0.17; % min.^-1
-h5 = 0.31; % min.^-1
+h5 = 0.31 * 0.8; % min.^-1
 
 k_apc = 0.0014; % min.^-1
 h_apc = 0.1; % min.^-1

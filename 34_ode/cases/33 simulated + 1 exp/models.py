@@ -35,7 +35,7 @@ class PINN(tf.keras.Model):
         # self.K_8M_m = tf.Variable(0.0, dtype=tf.float32, trainable=True)
         # self.k_8t_m = tf.Variable(0.0, dtype=tf.float32, trainable=True)
 
-        self.opt = tf.keras.optimizers.Adam(learning_rate=1e-3)
+        self.opt = tf.keras.optimizers.legacy.Adam(learning_rate=1e-3) # tf.keras.optimizers.Adam(learning_rate=1e-3)
 
         self.eps = tf.constant(eps, tf.float32)
 
